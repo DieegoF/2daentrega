@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './styles.css';
 import { useNavigate } from 'react-router-dom';
-import { PRODUCTS } from '../../constant/data/products';
-import { Card, Loader, Progress} from '../../Componentes';
-
+import { Card, Loader, Progress, FilterMenuItem} from '../../Componentes'
+import { CartContext } from "../../context";
+import { firebaseServices } from '../../services';
+import { getFirestore, doc, getdoc } from 'firebase/firestore';
+ 
+const { getProducts, getCategories, getProductsByCategory } = firebaseServices
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [categories, setCategories] = useState([]);
+  const { products, setProducts} = useContext(CartContext);
   const navigate = useNavigate();
   const onHandlerSelect = (product) => {  
-    navigate(`/product/${product.id}`, { state: product})
+    navigate(`/product/${product.id}`)
   }
+
 
   useEffect(() => {
     const getDocHeight = () => {
@@ -43,10 +49,27 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        const allProducts = await getProducts();
+        const allCategories = await getCategories();
+        setProducts(allProducts);
+        setCategories(allCategories);
+      } catch (error) {
+        console.log(error);
+      }
+    finally {
       setLoading(false);
-    }, 2000);
+    }
+  }
+    getData();
   }, []);
+
+  const onFilter = async (id) => {
+    const filterByCategory = await getProductsByCategory(id);
+    setProducts(filterByCategory);
+  };
 
   return (
     <div className="home-container">
@@ -57,9 +80,14 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <h1>Productos </h1>
+          <div className='filter-menu-container'>
+            {categories && categories.map((category) => (
+              <FilterMenuItem key={category.id} {...category} onFilter={onFilter} />
+            ))}
+          </div>
+          <h1>Productos destacados</h1>
           <div className='products-container'>
-          {PRODUCTS.map((product) => (
+          {products.map((product) => (
             <Card product={product} key={product.id} onSelect={onHandlerSelect}/>
           ))}
           </div>
