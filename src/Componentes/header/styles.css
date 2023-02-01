@@ -5,7 +5,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background-color: black;
+    background-color: white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 .header-menu-logo {
@@ -16,7 +16,7 @@
 .header-logo {
     font-size: 1.7rem;
     font-weight: bold;
-    color: white;
+    color: black;
 }
 .header-menu-cart {
     display: flex;

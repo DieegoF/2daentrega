@@ -7,7 +7,6 @@ import { BrowserRouter } from 'react-router-dom';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,9 +22,9 @@ const firebaseConfig = {
   measurementId: "G-M1GV073K3T"
 };
 
+// Initialize Firebase
+initializeApp(firebaseConfig);
 
-const app = initializeApp(firebaseConfig);
-const Analytics = getAnalytics(app);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

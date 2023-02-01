@@ -85,7 +85,7 @@ const Home = () => {
               <FilterMenuItem key={category.id} {...category} onFilter={onFilter} />
             ))}
           </div>
-          <h1>Productos destacados</h1>
+          <h1>Productos </h1>
           <div className='products-container'>
           {products.map((product) => (
             <Card product={product} key={product.id} onSelect={onHandlerSelect}/>
